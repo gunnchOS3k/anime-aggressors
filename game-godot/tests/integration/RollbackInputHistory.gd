@@ -139,6 +139,15 @@ func run() -> void:
 	check(not reconfigured.advance_frame([],[]).ok and not reconfigured.confirm_remote_input(1,3,{}).ok and state(reconfigured) == reconfigured_before,"player_count_cannot_change_under_retained_input_history")
 	reconfigured.reset()
 	check(reconfigured.advance_frame([],[]).ok and reconfigured.current_frame == 1 and reconfigured._history[0].inputs.size() == 4,"explicit_session_reset_releases_old_player_count_binding")
+	var prefix = Session.new()
+	prefix.confirm_remote_input(2,1,{"attack":true})
+	check(prefix.confirmed_through_frame(1)==-1,"queued_later_input_does_not_acknowledge_missing_prefix")
+	prefix.confirm_remote_input(0,1,{})
+	check(prefix.confirmed_through_frame(1)==0,"received_prefix_stops_at_first_gap")
+	prefix.confirm_remote_input(1,1,{"shield":true})
+	check(prefix.confirmed_through_frame(1)==2 and prefix.current_frame==0,"filling_hole_advances_input_receipt_prefix_not_simulation")
+	prefix.reset()
+	check(prefix.confirmed_through_frame(1)==-1 and prefix._confirmed_through.is_empty(),"session_reset_retires_confirmation_prefix")
 	check(Session.self_test().ok, "existing_private_checksum_scaffold_self_test_still_passes")
 	var result := {"PASS":failures.is_empty(),"checks":checks,"failures":failures,"scope":"Actual standalone Godot input/checksum scaffold only. No game-world rollback, multiplayer sockets, renderer/art/device/human acceptance.","HUMAN_ART_APPROVED":false,"RC2_READY":false,"V1_0_0_RELEASE_AUTHORIZED":false}
 	if not output.is_empty():

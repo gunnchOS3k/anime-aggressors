@@ -227,7 +227,9 @@ func _deliver(from_peer: PeerLocal, to_peer: PeerLocal, dt_ms: float) -> Array:
 				if not bool(confirmation.get("ok", false)):
 					_reject_input(str(confirmation.get("error", "confirmation_rejected")), from_peer, to_peer, frame)
 					break
-				to_peer.last_confirmed_frame = maxi(to_peer.last_confirmed_frame, frame)
+				# ACK only a contiguous received INPUT prefix. A later packet
+				# cannot acknowledge missing history or certify a played world.
+				to_peer.last_confirmed_frame = to_peer.rollback.confirmed_through_frame(pid)
 				accepted.append(msg)
 			_OnlineProtocol.MSG_CHECKSUM:
 				var c: Dictionary = msg.get("payload", {})

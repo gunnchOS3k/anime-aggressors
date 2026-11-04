@@ -96,13 +96,14 @@ def run(base, output, integration_sha):
         data = json.loads(result_path.read_text()) if result_path.exists() else {}
         passed = bool(data.get("PASS", False)) if name != "unlock" else bool(data.get("ok", False))
         checks = data.get("checks", [])
-        outcome.update({"PASS": outcome["PASS"] and passed, "result": data,
+        runtime_errors = [line for line in (output / ("cursor-" + name + ".log")).read_text(errors="replace").splitlines() if "ERROR:" in line]
+        outcome.update({"PASS": outcome["PASS"] and passed and not runtime_errors, "assertions_PASS": passed, "runtime_errors": runtime_errors, "result": data,
                         "checks": len(checks) if isinstance(checks, list) else int(checks), "failures": data.get("failures", ["Missing source fixture result"]),
                         "script_sha256": sha(script_path), "result_sha256": sha(result_path) if result_path.exists() else None})
         record["suites"][name] = outcome
         # A real failure remains a failure; never rewrite Cursor code in order
         # to obtain an independent pass or continue masking parser errors.
-        if not outcome["PASS"]:
+        if outcome.get("script_errors") or outcome.get("guard_stop"):
             break
     record["PASS"] = len(record["suites"]) == 3 and all(row["PASS"] for row in record["suites"].values())
     record["available_end_bytes"] = guard()

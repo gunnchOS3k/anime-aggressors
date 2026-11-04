@@ -98,14 +98,15 @@ def run(scope="all"):
         if not record["godot_version"].startswith("4.7.1.stable"): raise RuntimeError("Unexpected engine")
         if scope == "cursor-interface":
             from run_cursor_interface_ci import run as run_cursor_interface
-            return run_cursor_interface([godot], output, head)
+            record = run_cursor_interface([godot], output, head)
+            return record
         project = ROOT / "game-godot/project.godot"
         config = re.sub(r'^config/(?:name|use_custom_user_dir|custom_user_dir_name)=.*\n', '', project.read_text(), flags=re.M)
         project.write_text(config.replace('[application]', '[application]\nconfig/name="aa-native-ci-lan"\nconfig/use_custom_user_dir=true\nconfig/custom_user_dir_name="aa-native-ci-lan"', 1))
         base = [godot, "--headless", "--path", str(ROOT / "game-godot"), "--audio-driver", "Dummy", "--rendering-method", "gl_compatibility"]
         record["import"] = execute(base + ["--editor", "--import", "--quit"], output / "import.log", 180)
         if not record["import"]["PASS"]: return record
-        if scope in ["projectiles", "physics", "resim"]:
+        if scope in ["projectiles", "physics", "resim", "inputs"]:
             component_suites = [
                 ("projectile-history", "tests/integration/ProjectileComponentHistory.gd", "PROJECTILE_COMPONENT_HISTORY.json"),
                 ("projectile-impact", "tests/v1_closure/ProjectileFighterImpact.gd", "projectile_fighter_impact.json"),
@@ -118,6 +119,8 @@ def run(scope="all"):
                 ("body-vertical-replay", "tests/integration/BodyVerticalReplay.gd", "BODY_VERTICAL_REPLAY.json"),
                 ("training-controls", "tests/integration/TrainingControls.gd", "TRAINING_CONTROLS.json"),
             ]
+            if scope == "inputs":
+                component_suites = [row for row in component_suites if row[0] in ["rollback-input-history", "private-input-confirmation"]]
             for name, script, filename in component_suites:
                 outcome = execute(base + ["--fixed-fps", "60", "--script", "res://" + script, "--", "--ordinary-output=" + str(output)], output / (name + ".log"))
                 path = output / filename
@@ -132,6 +135,7 @@ def run(scope="all"):
                 record["resim_combined_sampled_peak_rss_bytes"] = independent["combined_sampled_peak_rss_bytes"]
             record["PASS"] = all(s["PASS"] for s in record["suites"].values())
             record["scope"] = "Projectile retained-node component history plus affected original impact/clash and Nix cancel regressions. No historical CharacterBody/world replay, delayed-input combat, native visual/audio/device or human acceptance. Other suites NOT rerun." if scope == "projectiles" else "Isolated source-owned flat-floor movement/contact restore/replay trial only. Reuse unchanged accepted projectile-history receipts. Experimental backend NOT enabled in production LAN; no shipping CharacterBody parity, complete game-world replay, real delayed-packet LAN or native art/audio/device acceptance. Other suites NOT rerun."
+            if scope == "inputs": record["scope"] = "Focused actual Godot input ownership, contiguous input-receipt prefix and private protocol delivery only. No sockets or world rollback; reuse unchanged live LAN/body/resim/Training exact-source receipts."
             if scope == "resim": record["scope"] = "Focused input/body/Training regressions and two actual ENet processes over the experimental owned world. No shipping CharacterBody rollback, 4/6/8-player, physical LAN/online, rendered/audio/device/art or human acceptance."
             return record
         if scope == "attack":
@@ -210,5 +214,5 @@ def run(scope="all"):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--scope", choices=["all", "respawn", "attack", "projectiles", "physics", "resim", "cursor-interface"], default="all")
+    parser.add_argument("--scope", choices=["all", "respawn", "attack", "projectiles", "physics", "resim", "cursor-interface", "inputs"], default="all")
     raise SystemExit(0 if run(parser.parse_args().scope)["PASS"] else 1)

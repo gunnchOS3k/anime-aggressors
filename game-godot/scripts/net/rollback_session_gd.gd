@@ -15,6 +15,7 @@ var current_frame: int = 0
 var max_players: int = 2
 var _history: Array = []  # [{frame, inputs:Array[Dict], confirmed:Array[bool], checksum:String}]
 var _confirmed: Dictionary = {}  # "f:p" -> buttons
+var _confirmed_through: Dictionary = {} # player -> contiguous received input prefix, not played-world state
 var _predicted: Dictionary = {}
 var rollback_count: int = 0
 var last_rollback_frame: int = -1
@@ -33,6 +34,7 @@ func reset() -> void:
 	_history.clear()
 	_confirmed.clear()
 	_predicted.clear()
+	_confirmed_through.clear()
 	rollback_count = 0
 	last_rollback_frame = -1
 	desync_detected = false
@@ -112,6 +114,7 @@ func advance_frame(local_inputs: Array, confirmed_flags: Array) -> Dictionary:
 			_predicted.erase(key)
 		else:
 			_predicted[key] = inputs[p].duplicate(true)
+	for p in range(max_players): _refresh_confirmed_prefix(p)
 	var checksum := _checksum_for(current_frame, inputs)
 	last_checksum = checksum
 	_history.append({
@@ -141,6 +144,19 @@ func _valid_remote_buttons(buttons: Dictionary) -> bool:
 	return true
 
 
+func confirmed_through_frame(player_id: int) -> int:
+	# Contiguous INPUT receipt only. A future queued input is not a played,
+	# restored, simulated or confirmed game-world frame.
+	if not _valid_player_count() or player_id < 0 or player_id >= max_players: return -1
+	return int(_confirmed_through.get(player_id,-1))
+
+
+func _refresh_confirmed_prefix(player_id: int) -> void:
+	var through: int = int(_confirmed_through.get(player_id,-1))
+	while _confirmed.has(_key(through+1,player_id)): through += 1
+	_confirmed_through[player_id] = through
+
+
 func _prune_inputs() -> void:
 	if _history.is_empty(): return
 	var oldest: int = int(_history[0].frame)
@@ -166,6 +182,7 @@ func confirm_remote_input(frame: int, player_id: int, buttons: Dictionary) -> Di
 	if frame >= current_frame:
 		_bound_player_count = max_players
 		_confirmed[key] = canonical.duplicate(true)
+		_refresh_confirmed_prefix(player_id)
 		return {"ok": true, "rolled_back": false, "queued": true, "frame": frame}
 	if not policy.can_rollback(frame, current_frame):
 		desync_detected = true
@@ -180,6 +197,7 @@ func confirm_remote_input(frame: int, player_id: int, buttons: Dictionary) -> Di
 	var original: Dictionary = _history[start_idx]
 	_bound_player_count = max_players
 	_confirmed[key] = canonical.duplicate(true)
+	_refresh_confirmed_prefix(player_id)
 	_predicted.erase(key)
 	if original.inputs[player_id] == canonical:
 		original.confirmed[player_id] = true
@@ -232,6 +250,7 @@ func as_dict() -> Dictionary:
 		"history_len": _history.size(),
 		"configured_players": max_players,
 		"bound_players": _bound_player_count,
+		"contiguous_input_prefix": _confirmed_through.duplicate(),
 		"policy": policy.as_dict(),
 	}
 

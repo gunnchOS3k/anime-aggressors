@@ -75,6 +75,16 @@ func run() -> void:
 	normal.guest_peer.outbound.send(Integrity.sign_envelope(Protocol.encode_input(2,1,{"shield":false})))
 	var duplicate: Array = normal._deliver(normal.guest_peer,normal.host_peer,0.0)
 	check(duplicate.size() == 1 and normal.host_peer.rollback._history == duplicate_before.history and normal.host_peer.last_confirmed_frame == 2, "identical_duplicate_does_not_rewrite_or_advance_confirmed_history")
+	# Real delivery of reordered queued inputs cannot falsely ACK a missing
+	# prefix. Receipt ACKs do not advance the actual played-frame counter.
+	var gap = fresh()
+	gap.guest_peer.outbound.send(Integrity.sign_envelope(Protocol.encode_input(2,1,{"shield":true})))
+	check(gap._deliver(gap.guest_peer,gap.host_peer,0.0).size()==1 and gap.host_peer.last_confirmed_frame==-1,"reordered_frame_two_cannot_acknowledge_missing_zero_and_one")
+	gap.guest_peer.outbound.send(Integrity.sign_envelope(Protocol.encode_input(0,1,{})))
+	check(gap._deliver(gap.guest_peer,gap.host_peer,0.0).size()==1 and gap.host_peer.last_confirmed_frame==0,"first_missing_input_advances_only_contiguous_prefix")
+	gap.guest_peer.outbound.send(Integrity.sign_envelope(Protocol.encode_input(1,1,{"attack":true})))
+	check(gap._deliver(gap.guest_peer,gap.host_peer,0.0).size()==1 and gap.host_peer.last_confirmed_frame==2 and gap.host_peer.rollback.current_frame==0,"filling_last_hole_acknowledges_retained_future_inputs_without_inventing_played_frames")
+	check(gap.host_peer.rollback.confirmed_through_frame(0)==-1,"guest_confirmation_cannot_acknowledge_host_owned_slot")
 	var conflict = fresh()
 	conflict.guest_peer.outbound.send(Integrity.sign_envelope(Protocol.encode_input(0,1,{"attack":true})))
 	conflict._deliver(conflict.guest_peer,conflict.host_peer,0.0)
