@@ -62,7 +62,12 @@ func run() -> void:
 	check(_select_move(panel, "heavy_attack"), "canonical_heavy_selected_from_actual_catalogue")
 	var heavy_text: String = panel._glyph_label.text
 	check(heavy_text.contains("[Q]") and heavy_text.contains("[K]") and not heavy_text.contains("[L]"), "actual_heavy_UI_shows_Attack_Special_not_Shield")
-	await click(panel._btn_pin)
+	# Use the actual focused GUI action. The headless viewport clips the
+	# bottom preview controls; a pointer at that offscreen rect is not proof
+	# that Try This activated. This is keyboard GUI, not mouse/native acceptance.
+	panel._btn_pin.grab_focus()
+	await accept_focused()
+	control_rows.append({"phase":"pin", "selected":panel._current_entry().get("move_id", ""), "pinned":training._pinned_entry.get("move_id", ""), "reminder":training._pin_reminder.text})
 	await click(panel._btn_close)
 	check(not panel.visible and training._pin_reminder.text.contains("[Q]") and training._pin_reminder.text.contains("[K]"), "pinned_practice_reminder_uses_current_chord")
 	check(await _legal_control(p), "real_grounded_control_before_heavy")

@@ -1,3 +1,15 @@
+# 2026-11-03 — Preserved newer input fixes; body parity and Training GUI correction pending remote engine
+
+Recovered local56e95459f2af8358750f302369f5a71193b74640, remote b4f9808b4e52b8a6b80fdb1cc286d56ec3f94c91 on integration/v1-preserved-candidate-20261025. Local983c5104/56e95459 retained unchanged: exact isolated engine20/55 source receipts are under docs/handoff/2026-11-01; no full combat rollback/Story/native claim. Only outputs/ was untracked. No reset/rebase/merge/worktree recreation. Ten fighters are now canonical; Rosamere and her three manifestations remain Cursor-owned. Do not copy or compete with that implementation.
+
+Recovered interrupted public official Godot4.7.1 run40584494323 atb4f9808b: importPASS, originalFlatCombatReplay24PASS. BodyVerticalReplay21checks:20PASS, oneparityFAIL; actual body contact, exact damage2.304/launch/state/moveframe parity, same-input body replay, one-input defended alternate, actual jump/double jump/landing and airborne replay allPASS. Velocities/states/floors matched every compared step; roots differed by22px because actual Training spawns±180 versus stage manifest±202. Candidate now binds actual readonly source x and includes initial roots in immutable contract. No whole-character translation or shipping spawn changes. Rawnegative outputs/body_vertical_b4f9808b retained.
+
+TrainingControls139checks:137PASS; real physical remapped Heavy and earnedTier3→KAIA_AWAKENED_BUILD oncePASS. Pinned-reminder and move-start feedback failed because headless pointer did not activate offscreen TryThis. Fixture now uses actual focused keyboard GUI accept, records selected/pinned/reminder, preserves assertions. Mouse/native layout acceptance remains open. No fake signal/contact/form grants.
+
+NEXT commit/push preserved source and focused fixes, existing public Ubuntu physics scope (oldflat24,newbody/vertical,Trainingcontrols,20inputhistory,55privateconfirmation). Correct actual engine failures. Then extend bounded input/world replay and run affected real LAN integration. All localheavy/Blender/capture/privateart reads remain held; no repeatresource scans/storage qualification, save edits/cleanup/spending. Existingprivate paid job remains disabled. All human/art/gameplay/paired-runtime/RC2/release gatesfalse.
+
+---
+
 # 2026-10-27 — Body/vertical replay and real Training controls: engine validation pending
 
 Branch integration/v1-preserved-candidate-20261025. Prior accepted source/receipts preserved. New bounded candidate extends isolated owned movement with full/short/double jump, gravity/landing, canonical body damage/DI/knockback/hurt/hitstop/earned aura and atomic airborne/input snapshots. Shipping LAN still does NOT load it. Fighter body launch policy extracted unchanged into combat/body_hit_motion.gd; complete relevant integration regression required after focused parity. New BodyVerticalReplay compares actual public Training actors using real inputs against candidate motion/contact, then restores body/air histories and changes one defensive input. Engine outcome PENDING; no claim of physics parity or full-world rollback.

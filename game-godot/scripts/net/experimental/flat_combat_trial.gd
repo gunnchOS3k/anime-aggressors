@@ -466,12 +466,15 @@ func _configure_from_live_impl(p: Node, d: Node, stage: Dictionary, epoch_value:
 		add_child(actor)
 		actor.setup(self, i + 1, source, move if i == 0 else {})
 		var spawn: Dictionary = stage.spawnPoints[i]
-		actor.position = Vector2(float(spawn.x), platform.position.y - actor.body_rect.end.y)
+		# Training owns different spawn roots from stage.spawnPoints. Bind the
+		# actual scene's readonly source x, never invent a per-actor offset or
+		# relocate the shipping character. Owned floor remains geometry based.
+		actor.position = Vector2(float(source.global_position.x), platform.position.y - actor.body_rect.end.y)
 		actors.append(actor)
 	resolver = TimelineResolver.new()
 	resolver.world = self
 	add_child(resolver)
-	_contract = digest({"stage":stage, "actors":actors.map(func(actor): return {"fighter":actor.fighter_id, "body":actor.body_variant, "data":actor.data, "jab":actor.jab, "body_rect":actor.body_rect, "hurt_rect":actor.hurt_rect, "run":actor.run_speed, "dash":actor.dash_speed, "traction":actor.traction, "fall_speed":actor.fall_speed, "jump":actor.jump_strength, "air_speed":actor.air_speed, "air_accel":actor.air_accel}), "rules_ratio":_rules_ratio})
+	_contract = digest({"stage":stage, "actors":actors.map(func(actor): return {"fighter":actor.fighter_id, "body":actor.body_variant, "data":actor.data, "jab":actor.jab, "body_rect":actor.body_rect, "hurt_rect":actor.hurt_rect, "initial_root":actor.position, "run":actor.run_speed, "dash":actor.dash_speed, "traction":actor.traction, "fall_speed":actor.fall_speed, "jump":actor.jump_strength, "air_speed":actor.air_speed, "air_accel":actor.air_accel}), "rules_ratio":_rules_ratio})
 	_ready_trial = true
 	return true
 
