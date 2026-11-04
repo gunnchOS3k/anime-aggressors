@@ -96,6 +96,9 @@ def run(scope="all"):
         godot = os.environ["GODOT_BIN"]
         record["godot_version"] = subprocess.check_output([godot, "--version"], text=True).strip()
         if not record["godot_version"].startswith("4.7.1.stable"): raise RuntimeError("Unexpected engine")
+        if scope == "cursor-interface":
+            from run_cursor_interface_ci import run as run_cursor_interface
+            return run_cursor_interface([godot], output, head)
         project = ROOT / "game-godot/project.godot"
         config = re.sub(r'^config/(?:name|use_custom_user_dir|custom_user_dir_name)=.*\n', '', project.read_text(), flags=re.M)
         project.write_text(config.replace('[application]', '[application]\nconfig/name="aa-native-ci-lan"\nconfig/use_custom_user_dir=true\nconfig/custom_user_dir_name="aa-native-ci-lan"', 1))
@@ -207,5 +210,5 @@ def run(scope="all"):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--scope", choices=["all", "respawn", "attack", "projectiles", "physics", "resim"], default="all")
+    parser.add_argument("--scope", choices=["all", "respawn", "attack", "projectiles", "physics", "resim", "cursor-interface"], default="all")
     raise SystemExit(0 if run(parser.parse_args().scope)["PASS"] else 1)
