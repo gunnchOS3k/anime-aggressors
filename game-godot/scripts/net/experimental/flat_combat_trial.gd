@@ -412,6 +412,10 @@ var _contract := ""
 var _rules_ratio := 1.0
 var _advancing := false
 var _ready_trial := false
+# Trusted local replay transaction. The ticket cannot supply replacement
+# state; abort may reinstall ONLY the origin captured privately by this world.
+var _replay_ticket: RefCounted
+var _replay_origin: Dictionary = {}
 
 func reject(reason: String) -> void:
 	if failure.is_empty(): failure = reason
@@ -542,13 +546,31 @@ func capture() -> Dictionary:
 	assert(_ready_trial and not _advancing)
 	return {"schema":"flat_combat_trial/v2", "world":get_instance_id(), "epoch":epoch, "frame":frame, "contract":_contract, "actors":actors.map(func(actor):return actor.capture()), "events":events.duplicate(true), "contact_sequence":resolver._contact_sequence, "resolver_logs":resolver.recent_logs(), "failure":failure}
 
+func begin_replay_transaction() -> RefCounted:
+	if not _ready_trial or _advancing or _replay_ticket != null or not failure.is_empty(): return null
+	_replay_origin = {"state":capture(), "retired":last_retired_events.duplicate(true)}
+	_replay_ticket = RefCounted.new()
+	return _replay_ticket
+
+func end_replay_transaction(ticket: RefCounted, commit: bool) -> bool:
+	if ticket == null or ticket != _replay_ticket or _advancing: return false
+	if not commit:
+		if not _restore_record(_replay_origin.state, int(_replay_origin.state.frame)): return false
+		last_retired_events = _replay_origin.retired.duplicate(true)
+	_replay_ticket = null
+	_replay_origin = {}
+	return true
+
 func restore(record: Dictionary) -> bool:
+	return _restore_record(record, frame)
+
+func _restore_record(record: Dictionary, maximum_frame: int) -> bool:
 	if not _ready_trial or _advancing: return false
 	var baseline := capture()
 	if record.size() != baseline.size() or record.get("schema", "") != baseline.schema or record.get("world", 0) != get_instance_id() or record.get("epoch", 0) != epoch or record.get("contract", "") != _contract: return false
 	for key in baseline:
 		if not record.has(key) or typeof(record[key]) != typeof(baseline[key]): return false
-	if not finite_value(record) or record.frame < 0 or record.frame > frame or record.frame > LIMIT or record.actors.size() != 2 or record.events.size() > LIMIT or record.contact_sequence < 0 or record.contact_sequence > LIMIT or record.resolver_logs.size() > 24 or not record.failure.is_empty(): return false
+	if not finite_value(record) or record.frame < 0 or record.frame > maximum_frame or record.frame > LIMIT or record.actors.size() != 2 or record.events.size() > LIMIT or record.contact_sequence < 0 or record.contact_sequence > LIMIT or record.resolver_logs.size() > 24 or not record.failure.is_empty(): return false
 	var ids: Dictionary = {}
 	for event in record.events:
 		if typeof(event) != TYPE_DICTIONARY or event.get("timeline_epoch", -1) != epoch or typeof(event.get("gameplay_frame")) != TYPE_INT or event.gameplay_frame < 1 or event.gameplay_frame > record.frame or typeof(event.get("combat_event_id")) != TYPE_STRING or event.combat_event_id.is_empty() or ids.has(event.combat_event_id) or event.get("contact_result", "") not in ["shield", "parry", "hit", "whiff"]: return false
@@ -592,3 +614,20 @@ func digest(value: Variant) -> String:
 	hash_context.start(HashingContext.HASH_SHA256)
 	hash_context.update(var_to_bytes(value))
 	return hash_context.finish().hex_encode()
+
+func portable_state_checksum() -> String:
+	# Cross-process comparison only, NOT restore authority. Remove solely
+	# engine allocation IDs; every gameplay value/contract/event remains.
+	var state: Dictionary = capture()
+	state.erase("world")
+	for row in state.actors:
+		row.identity.erase("instance")
+		for component in ["runner","guard","machine"]: row[component].owner.erase("instance")
+		var targets: Dictionary = {}
+		for key in row.runner.hit_targets:
+			var matched := false
+			for actor in actors:
+				if key == str(actor.get_instance_id()): targets[str(actor.slot)] = row.runner.hit_targets[key]; matched = true; break
+			assert(matched)
+		row.runner.hit_targets = targets
+	return digest(state)

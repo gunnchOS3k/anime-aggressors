@@ -102,7 +102,7 @@ def run(scope="all"):
         base = [godot, "--headless", "--path", str(ROOT / "game-godot"), "--audio-driver", "Dummy", "--rendering-method", "gl_compatibility"]
         record["import"] = execute(base + ["--editor", "--import", "--quit"], output / "import.log", 180)
         if not record["import"]["PASS"]: return record
-        if scope in ["projectiles", "physics"]:
+        if scope in ["projectiles", "physics", "resim"]:
             component_suites = [
                 ("projectile-history", "tests/integration/ProjectileComponentHistory.gd", "PROJECTILE_COMPONENT_HISTORY.json"),
                 ("projectile-impact", "tests/v1_closure/ProjectileFighterImpact.gd", "projectile_fighter_impact.json"),
@@ -122,8 +122,14 @@ def run(scope="all"):
                 outcome.update({"PASS": outcome["PASS"] and bool(data.get("PASS", False)), "failures": data.get("failures", []),
                                 "checks": len(data.get("checks", [])), "rows": len(data.get("rows", [])), "result": data})
                 record["suites"][name] = outcome
+            if scope == "resim" and all(s["PASS"] for s in record["suites"].values()):
+                independent = pair(base, output / "owned-world-resim", "tests/integration/LanOwnedWorldResim.gd")
+                record["suites"].update({"resim-"+k:v for k,v in independent["suites"].items()})
+                record["resim_seconds"] = independent["seconds"]
+                record["resim_combined_sampled_peak_rss_bytes"] = independent["combined_sampled_peak_rss_bytes"]
             record["PASS"] = all(s["PASS"] for s in record["suites"].values())
             record["scope"] = "Projectile retained-node component history plus affected original impact/clash and Nix cancel regressions. No historical CharacterBody/world replay, delayed-input combat, native visual/audio/device or human acceptance. Other suites NOT rerun." if scope == "projectiles" else "Isolated source-owned flat-floor movement/contact restore/replay trial only. Reuse unchanged accepted projectile-history receipts. Experimental backend NOT enabled in production LAN; no shipping CharacterBody parity, complete game-world replay, real delayed-packet LAN or native art/audio/device acceptance. Other suites NOT rerun."
+            if scope == "resim": record["scope"] = "Focused input/body/Training regressions and two actual ENet processes over the experimental owned world. No shipping CharacterBody rollback, 4/6/8-player, physical LAN/online, rendered/audio/device/art or human acceptance."
             return record
         if scope == "attack":
             earned = pair(base + ["--verbose"], output / "attack-earned", "tests/integration/LanAttackEarnedMatch.gd")
@@ -201,5 +207,5 @@ def run(scope="all"):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--scope", choices=["all", "respawn", "attack", "projectiles", "physics"], default="all")
+    parser.add_argument("--scope", choices=["all", "respawn", "attack", "projectiles", "physics", "resim"], default="all")
     raise SystemExit(0 if run(parser.parse_args().scope)["PASS"] else 1)

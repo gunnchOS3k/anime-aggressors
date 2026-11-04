@@ -7,6 +7,10 @@ class_name RollbackSessionGd
 const _RollbackLatencyPolicy = preload("res://scripts/net/rollback_latency_policy.gd")
 
 var policy
+# Declared PartyLink seat counts. These bound input arrays only; neither this
+# scaffold nor a passing multi-slot test constitutes 4/6/8-client gameplay.
+const SUPPORTED_PLAYER_COUNTS := [2, 4, 6, 8]
+var _bound_player_count: int = 0
 var current_frame: int = 0
 var max_players: int = 2
 var _history: Array = []  # [{frame, inputs:Array[Dict], confirmed:Array[bool], checksum:String}]
@@ -24,6 +28,7 @@ func _init() -> void:
 
 
 func reset() -> void:
+	_bound_player_count = 0
 	current_frame = 0
 	_history.clear()
 	_confirmed.clear()
@@ -58,23 +63,55 @@ func _checksum_for(frame: int, inputs: Array) -> String:
 	return str(hash("|".join(parts)))
 
 
+func _valid_player_count() -> bool:
+	return max_players in SUPPORTED_PLAYER_COUNTS and (_bound_player_count == 0 or _bound_player_count == max_players)
+
+
+func _normalized_buttons(buttons: Dictionary) -> Dictionary:
+	# Call only after strict validation. An omitted button means released,
+	# never "unknown", and is semantically equal to its explicit false value.
+	var result := _default_buttons()
+	for button in buttons:
+		result[button] = buttons[button]
+	return result
+
+
 func advance_frame(local_inputs: Array, confirmed_flags: Array) -> Dictionary:
-	## local_inputs: Array of button dicts sized to max_players (may be partial).
+	## Partial arrays are permitted; every supplied value must still be valid.
+	## Validate the ENTIRE frame before changing any slot, map or frame counter.
+	if not _valid_player_count():
+		return {"ok":false, "error":"invalid_player_count", "frame":current_frame}
+	if local_inputs.size() > max_players or confirmed_flags.size() > max_players:
+		return {"ok":false, "error":"invalid_frame_shape", "frame":current_frame}
 	var inputs: Array = []
 	var confirmed: Array = []
 	for p in range(max_players):
 		var key := _key(current_frame, p)
-		var provided: Dictionary = local_inputs[p] if p < local_inputs.size() and typeof(local_inputs[p]) == TYPE_DICTIONARY else _default_buttons()
-		var is_conf: bool = bool(confirmed_flags[p]) if p < confirmed_flags.size() else false
-		if is_conf:
-			_confirmed[key] = provided.duplicate(true)
-			inputs.append(provided.duplicate(true))
-		elif _confirmed.has(key):
+		var raw: Variant = local_inputs[p] if p < local_inputs.size() else {}
+		if typeof(raw) != TYPE_DICTIONARY or not _valid_remote_buttons(raw):
+			return {"ok":false, "error":"invalid_input", "frame":current_frame}
+		if p < confirmed_flags.size() and typeof(confirmed_flags[p]) != TYPE_BOOL:
+			return {"ok":false, "error":"invalid_confirmation_flag", "frame":current_frame}
+		var provided := _normalized_buttons(raw)
+		var is_conf: bool = confirmed_flags[p] if p < confirmed_flags.size() else false
+		if _confirmed.has(key):
+			# A queued authoritative input cannot be overwritten by the trusted
+			# frame caller either. Matching retransmission remains idempotent.
+			if is_conf and _confirmed[key] != provided:
+				return {"ok":false, "error":"conflicting_confirmation", "frame":current_frame}
 			inputs.append(_confirmed[key].duplicate(true))
 		else:
-			_predicted[key] = provided.duplicate(true)
-			inputs.append(provided.duplicate(true))
+			inputs.append(provided)
 		confirmed.append(is_conf or _confirmed.has(key))
+	# No validation or rejection remains after this point.
+	_bound_player_count = max_players
+	for p in range(max_players):
+		var key := _key(current_frame, p)
+		if bool(confirmed[p]):
+			_confirmed[key] = inputs[p].duplicate(true)
+			_predicted.erase(key)
+		else:
+			_predicted[key] = inputs[p].duplicate(true)
 	var checksum := _checksum_for(current_frame, inputs)
 	last_checksum = checksum
 	_history.append({
@@ -90,7 +127,7 @@ func advance_frame(local_inputs: Array, confirmed_flags: Array) -> Dictionary:
 	return {
 		"ok": true,
 		"frame": current_frame - 1,
-		"inputs": inputs,
+		"inputs": inputs.duplicate(true),
 		"checksum": checksum,
 		"rollback_count": rollback_count,
 	}
@@ -116,15 +153,19 @@ func _prune_inputs() -> void:
 func confirm_remote_input(frame: int, player_id: int, buttons: Dictionary) -> Dictionary:
 	# Inputs are immutable once confirmed. Validate before changing either the
 	# timeline or its pending maps; a rejected packet cannot poison a later step.
+	if not _valid_player_count():
+		return {"ok":false, "rolled_back":false, "error":"invalid_player_count", "frame":frame}
 	if frame < 0 or player_id < 0 or player_id >= max_players or not _valid_remote_buttons(buttons):
 		return {"ok": false, "rolled_back": false, "error": "invalid_input", "frame": frame}
 	if frame > current_frame + policy.max_rollback_frames:
 		return {"ok": false, "rolled_back": false, "error": "future_input_limit", "frame": frame}
 	var key := _key(frame, player_id)
+	var canonical := _normalized_buttons(buttons)
 	if _confirmed.has(key):
-		return {"ok": _confirmed[key] == buttons, "rolled_back": false, "error": "" if _confirmed[key] == buttons else "conflicting_confirmation", "frame": frame}
+		return {"ok": _confirmed[key] == canonical, "rolled_back": false, "error": "" if _confirmed[key] == canonical else "conflicting_confirmation", "frame": frame}
 	if frame >= current_frame:
-		_confirmed[key] = buttons.duplicate(true)
+		_bound_player_count = max_players
+		_confirmed[key] = canonical.duplicate(true)
 		return {"ok": true, "rolled_back": false, "queued": true, "frame": frame}
 	if not policy.can_rollback(frame, current_frame):
 		desync_detected = true
@@ -137,9 +178,10 @@ func confirm_remote_input(frame: int, player_id: int, buttons: Dictionary) -> Di
 	if start_idx < 0:
 		return {"ok": false, "rolled_back": false, "error": "missing_history", "frame": frame}
 	var original: Dictionary = _history[start_idx]
-	_confirmed[key] = buttons.duplicate(true)
+	_bound_player_count = max_players
+	_confirmed[key] = canonical.duplicate(true)
 	_predicted.erase(key)
-	if original.inputs[player_id] == buttons:
+	if original.inputs[player_id] == canonical:
 		original.confirmed[player_id] = true
 		return {"ok": true, "rolled_back": false, "frame": frame}
 	# This class only rebuilds INPUT CHECKSUMS, not a game-world snapshot.
@@ -188,6 +230,8 @@ func as_dict() -> Dictionary:
 		"last_rollback_frame": last_rollback_frame,
 		"desync_detected": desync_detected,
 		"history_len": _history.size(),
+		"configured_players": max_players,
+		"bound_players": _bound_player_count,
 		"policy": policy.as_dict(),
 	}
 

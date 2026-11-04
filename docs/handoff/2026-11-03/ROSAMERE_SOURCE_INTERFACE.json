@@ -1,0 +1,323 @@
+{
+  "HUMAN_ART_APPROVED": false,
+  "HUMAN_GAMEPLAY_PASS": false,
+  "PASS": true,
+  "RC2_READY": false,
+  "RUNTIME_PAIRED_CONTACT_VERIFIED": false,
+  "V1_0_0_RELEASE_AUTHORIZED": false,
+  "checks": [
+    {
+      "check": "ten_distinct_canonical_fighter_identities",
+      "pass": true
+    },
+    {
+      "check": "Rosamere_is_additive_secret_tenth",
+      "pass": true
+    },
+    {
+      "check": "ember-vale_original_move_manifest_preserved_byte_for_byte",
+      "pass": true
+    },
+    {
+      "check": "rook-ironside_original_move_manifest_preserved_byte_for_byte",
+      "pass": true
+    },
+    {
+      "check": "juno-spark_original_move_manifest_preserved_byte_for_byte",
+      "pass": true
+    },
+    {
+      "check": "kaia-windrow_original_move_manifest_preserved_byte_for_byte",
+      "pass": true
+    },
+    {
+      "check": "nix-calder_original_move_manifest_preserved_byte_for_byte",
+      "pass": true
+    },
+    {
+      "check": "orion-vell_original_move_manifest_preserved_byte_for_byte",
+      "pass": true
+    },
+    {
+      "check": "vesper-nyx_original_move_manifest_preserved_byte_for_byte",
+      "pass": true
+    },
+    {
+      "check": "yin_original_move_manifest_preserved_byte_for_byte",
+      "pass": true
+    },
+    {
+      "check": "yang_original_move_manifest_preserved_byte_for_byte",
+      "pass": true
+    },
+    {
+      "check": "fighter_move_form_animation_identity_agrees",
+      "pass": true
+    },
+    {
+      "check": "both_body_presentations_declared_not_runtime_verified",
+      "pass": true
+    },
+    {
+      "check": "existing_runtime_manifest_paths_match",
+      "pass": true
+    },
+    {
+      "bound_ids": [
+        "aura_burst",
+        "aura_charge",
+        "back_air",
+        "bloom_seed",
+        "dash_attack",
+        "down_air",
+        "down_tilt",
+        "first_dawn",
+        "forward_air",
+        "forward_tilt",
+        "gentle_reversal",
+        "grab",
+        "heavy_attack",
+        "jab_1",
+        "jab_2",
+        "jab_finisher",
+        "neutral_air",
+        "petal_constellation",
+        "throw_back",
+        "throw_down",
+        "throw_forward",
+        "throw_up",
+        "up_air",
+        "up_tilt"
+      ],
+      "check": "actual_move_inventory_and_unbound_signature_gaps",
+      "pass": true,
+      "unbound_ids": [
+        "a_world_in_bloom",
+        "before_there_was_time",
+        "mythic_everything_again",
+        "quiet_embrace",
+        "the_first_permission"
+      ]
+    },
+    {
+      "check": "character_owned_special_identifiers_retained",
+      "pass": true
+    },
+    {
+      "check": "exactly_three_manifestations_not_four",
+      "pass": true
+    },
+    {
+      "check": "competitive_and_story_ladders_distinguished",
+      "pass": true
+    },
+    {
+      "check": "fair_competitive_contract_attached_to_Familiar_Rose",
+      "pass": true
+    },
+    {
+      "check": "Everlasting_competitive_exclusion_and_mythic_consent_declared",
+      "pass": true
+    },
+    {
+      "check": "existing_mythic_transform_consent_requirement",
+      "pass": true
+    },
+    {
+      "check": "human_art_and_balance_acceptance_remain_pending",
+      "pass": true
+    },
+    {
+      "check": "nonoriginal_model_fallback_is_open_art_gap_not_finished_Rosamere_art",
+      "pass": true
+    },
+    {
+      "check": "source_signature_unlock_recomputed_from_reveal_helper_not_runtime_security_proof",
+      "pass": true
+    },
+    {
+      "check": "source_signature_completed_prefix_qualifying_battles_and_fighter_reveal_present_not_execution_proof",
+      "pass": true
+    },
+    {
+      "check": "source_signature_technical_contract_alias_preserves_manifestation_identity",
+      "pass": true
+    },
+    {
+      "check": "source_signature_existing_mode_and_consent_gates_present_not_runtime_proof",
+      "pass": true
+    },
+    {
+      "check": "shadow_LAN_bridge_does_not_enable_shipping_restore",
+      "pass": true
+    }
+  ],
+  "codex_comparison_sha": "56e95459f2af8358750f302369f5a71193b74640",
+  "cursor_branch_reference": "cursor/continuation-v1-batch4-stages-20261030",
+  "cursor_source_sha": "1d7eda52a49cc394d6865353b36034ab11663c41",
+  "failures": [],
+  "handoff": {
+    "Cursor_owns": [
+      "Rosamere",
+      "Story",
+      "Trials",
+      "presentation",
+      "stages",
+      "normal-game integration"
+    ],
+    "existing_human_seat_policy_scope": "two humans; not 4/6/8 independent clients",
+    "existing_shadow_netcode_requires_reuse_review": [
+      "flat_combat_resim.gd",
+      "lan_resim_bridge.gd",
+      "human_seat_policy.gd"
+    ],
+    "shared_conflict_paths_require_review_not_automatic_merge": [
+      "game-godot/scripts/fighters/fighter.gd",
+      "game-godot/scripts/battle/battle_scene.gd",
+      "game-godot/scripts/core/GameState.gd",
+      "game-godot/scripts/story/v1_campaign_runtime.gd",
+      "game-godot/scripts/net/lan_session.gd",
+      "game-godot/scripts/net/experimental/flat_combat_trial.gd"
+    ]
+  },
+  "inventory": {
+    "Rosamere_input_bound_records": 24,
+    "additive_Rosamere_records": 29,
+    "declared_manifestations": [
+      "FAMILIAR_ROSE",
+      "FIRST_BLOOM",
+      "EVERLASTING_ORIGIN"
+    ],
+    "original_BASE_records": 216,
+    "original_identities": 9
+  },
+  "remaining": [
+    "Rosamere engine and ordinary-input verification at the exact Cursor commit",
+    "original Rosamere model and move-specific art",
+    "five unbound signature records need source-authority execution review",
+    "conflict-aware code integration",
+    "2/4/6/8 independently controlled client matrix",
+    "shipping whole-world rollback"
+  ],
+  "schema": "anime_rosamere_source_interface/v1",
+  "scope": "Read-only immutable Git-object and JSON compatibility checks, including explicitly limited source signatures. No checkout/import/runtime/saves/inputs/native/device/art/earned unlock/secure network or rollback acceptance.",
+  "source_sha256": {
+    "1d7eda52a49cc394d6865353b36034ab11663c41": {
+      "game-godot/data/fighters/rosamere.json": {
+        "bytes": 6801,
+        "sha256": "f7ed9c68c99439f9f44371a61fd3818f539f1fbdc2b77b9f77b070d0241e48fd"
+      },
+      "game-godot/data/fighters/rosamere_animations.json": {
+        "bytes": 1046,
+        "sha256": "0b3b3b8061d5dff0116ac9ba24e1874988920033ddfd70b997638683ee805968"
+      },
+      "game-godot/data/fighters/roster.json": {
+        "bytes": 858,
+        "sha256": "cd486b2cfaf7c0de229cec4a0a7cfa5485f19fa5616a886bdcc1f5c919e56580"
+      },
+      "game-godot/data/forms/rosamere.json": {
+        "bytes": 8442,
+        "sha256": "8cd5f8dacb0d5d30e64ff5437b0b001cd14950a5f92b8fd628a391245b8757e4"
+      },
+      "game-godot/data/moves/ember-vale.json": {
+        "bytes": 52361,
+        "sha256": "93a2a5948c80f7b1a80b4430a10af2c1acb385bd66079484266a33317cd58b9e"
+      },
+      "game-godot/data/moves/juno-spark.json": {
+        "bytes": 53531,
+        "sha256": "3f0d4a6af21d7a360828f27f731cdac14e47ef214558bf94aa77721e8905111a"
+      },
+      "game-godot/data/moves/kaia-windrow.json": {
+        "bytes": 53345,
+        "sha256": "bcc1bfdab7860371088a7b1092352dfc345c726a67820babd6d7bd47e759460d"
+      },
+      "game-godot/data/moves/nix-calder.json": {
+        "bytes": 53043,
+        "sha256": "45d6db6232c896bd91f784c635f53d047afe58039debbc473fb84b2d000961b9"
+      },
+      "game-godot/data/moves/orion-vell.json": {
+        "bytes": 53428,
+        "sha256": "e5c56908c3719c22e4ce22c8708bde0e1ed6a0566696116bbd2e8d3c37d7075a"
+      },
+      "game-godot/data/moves/rook-ironside.json": {
+        "bytes": 53669,
+        "sha256": "0b827e5a60f333fc3b8b71e75773d8e7365213718ffa0cbe1a19de7ffc46ae8a"
+      },
+      "game-godot/data/moves/rosamere.json": {
+        "bytes": 64529,
+        "sha256": "b363691542d0e084d41ead4168a7f46f7e5aa1ae4095d6b50df952cb95e4a340"
+      },
+      "game-godot/data/moves/vesper-nyx.json": {
+        "bytes": 53288,
+        "sha256": "14235a1cefb0ac41f10a2715b931f390c5668739fd4638daf2d03f577f66aa0e"
+      },
+      "game-godot/data/moves/yang.json": {
+        "bytes": 55558,
+        "sha256": "61b31f0884846271ab7eb8e086243cab1cf43c7dd31b1c3a7d80d4e42b56e22b"
+      },
+      "game-godot/data/moves/yin.json": {
+        "bytes": 54329,
+        "sha256": "f297bcadca496ebbdc32ad2a218d54b8d7ff818a826f8c8e444b1d70488b2c82"
+      },
+      "game-godot/scripts/combat/rosamere_form_selection.gd": {
+        "bytes": 7064,
+        "sha256": "12c6092ef4fbcdf5acaa241aad8a4309b1f75b6264942d3fc92503ac71b21bae"
+      },
+      "game-godot/scripts/net/experimental/flat_combat_resim.gd": {
+        "bytes": 6192,
+        "sha256": "cc750e9f3cc26cb020f0c7987fca6c32db840f51ecac46fe2976801711b34e14"
+      },
+      "game-godot/scripts/net/experimental/human_seat_policy.gd": {
+        "bytes": 3470,
+        "sha256": "67d3aa9b234b40315aede2614da60f1505d5c7fbf6f36c6d7e4122b9553d2cbb"
+      },
+      "game-godot/scripts/net/experimental/lan_resim_bridge.gd": {
+        "bytes": 6193,
+        "sha256": "73091c1d3f7160003e7f7292e45a7273cda4c136533131a5b931c273ac9c0847"
+      },
+      "game-godot/scripts/story/v1_campaign_runtime.gd": {
+        "bytes": 25225,
+        "sha256": "a75d4fc8a872f9c6bca0fd5e4d19373e0fd4f322cc32ee07bcfedc4f9fd78def"
+      }
+    },
+    "56e95459f2af8358750f302369f5a71193b74640": {
+      "game-godot/data/moves/ember-vale.json": {
+        "bytes": 52361,
+        "sha256": "93a2a5948c80f7b1a80b4430a10af2c1acb385bd66079484266a33317cd58b9e"
+      },
+      "game-godot/data/moves/juno-spark.json": {
+        "bytes": 53531,
+        "sha256": "3f0d4a6af21d7a360828f27f731cdac14e47ef214558bf94aa77721e8905111a"
+      },
+      "game-godot/data/moves/kaia-windrow.json": {
+        "bytes": 53345,
+        "sha256": "bcc1bfdab7860371088a7b1092352dfc345c726a67820babd6d7bd47e759460d"
+      },
+      "game-godot/data/moves/nix-calder.json": {
+        "bytes": 53043,
+        "sha256": "45d6db6232c896bd91f784c635f53d047afe58039debbc473fb84b2d000961b9"
+      },
+      "game-godot/data/moves/orion-vell.json": {
+        "bytes": 53428,
+        "sha256": "e5c56908c3719c22e4ce22c8708bde0e1ed6a0566696116bbd2e8d3c37d7075a"
+      },
+      "game-godot/data/moves/rook-ironside.json": {
+        "bytes": 53669,
+        "sha256": "0b827e5a60f333fc3b8b71e75773d8e7365213718ffa0cbe1a19de7ffc46ae8a"
+      },
+      "game-godot/data/moves/vesper-nyx.json": {
+        "bytes": 53288,
+        "sha256": "14235a1cefb0ac41f10a2715b931f390c5668739fd4638daf2d03f577f66aa0e"
+      },
+      "game-godot/data/moves/yang.json": {
+        "bytes": 55558,
+        "sha256": "61b31f0884846271ab7eb8e086243cab1cf43c7dd31b1c3a7d80d4e42b56e22b"
+      },
+      "game-godot/data/moves/yin.json": {
+        "bytes": 54329,
+        "sha256": "f297bcadca496ebbdc32ad2a218d54b8d7ff818a826f8c8e444b1d70488b2c82"
+      }
+    }
+  },
+  "status": "SOURCE_CONTRACT_VERIFIED"
+}

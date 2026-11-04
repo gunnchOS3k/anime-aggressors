@@ -16,8 +16,13 @@ func check(condition: bool, label: String) -> void:
 func state(session) -> Dictionary:
 	return {"public":session.as_dict().duplicate(true), "history":session._history.duplicate(true), "confirmed":session._confirmed.duplicate(true), "predicted":session._predicted.duplicate(true), "checksum":session.last_checksum}
 
+func canonical(buttons: Dictionary) -> Dictionary:
+	var result := {"left":false,"right":false,"up":false,"down":false,"jump":false,"attack":false,"special":false,"shield":false,"dodge":false,"grab":false}
+	for button in buttons: result[button] = buttons[button]
+	return result
+
 func inputs(frame: int, remote_attack: bool = false) -> Array:
-	return [{"left":frame % 2 == 0,"jump":frame == 3}, {"attack":remote_attack}]
+	return [canonical({"left":frame % 2 == 0,"jump":frame == 3}), canonical({"attack":remote_attack})]
 
 func expect_rejected(session, frame: int, player: int, buttons: Dictionary, label: String) -> void:
 	var before := state(session)
@@ -80,6 +85,60 @@ func run() -> void:
 	var history_before: Array = bounded._history.duplicate(true)
 	var late: Dictionary = bounded.confirm_remote_input(0,1,{"attack":true})
 	check(not late.ok and late.error == "beyond_rollback" and bounded.desync_detected and bounded._confirmed == confirmed_before and bounded._history == history_before and bounded.current_frame == 100, "stale_confirmation_reports_desync_without_poisoning_input_or_history")
+	# A queued remote confirmation is authoritative even when the local frame
+	# call accidentally marks its own contradictory copy confirmed.
+	var overwrite = Session.new()
+	check(overwrite.confirm_remote_input(0,1,{"attack":true}).ok,"queue_actual_remote_attack_before_frame")
+	var overwrite_before := state(overwrite)
+	var overwritten: Dictionary = overwrite.advance_frame([{"jump":true},{"attack":false}],[true,true])
+	check(not overwritten.ok and overwritten.error == "conflicting_confirmation" and state(overwrite) == overwrite_before,"queued_confirmation_cannot_be_overwritten_and_first_slot_is_atomic")
+	var matching: Dictionary = overwrite.advance_frame([{"jump":true},{"attack":true,"shield":false}],[true,true])
+	check(matching.ok and overwrite.current_frame == 1 and overwrite._history[0].inputs == [canonical({"jump":true}),canonical({"attack":true})],"matching_queued_confirmation_advances_once_with_original_owned_inputs")
+	var returned_inputs: Array = matching.inputs
+	returned_inputs[0].jump = false
+	check(overwrite._history[0].inputs[0].jump and overwrite._confirmed["0:0"].jump,"caller_cannot_rewrite_owned_history_through_returned_inputs")
+	# The public bool contract is the same in advance and confirmation. Validate
+	# a bad later slot or flag before any earlier slot becomes authoritative.
+	for bad_inputs in [[{}, {"attack":"bad"}], [{},[]], [{},null], [{}, {"teleport":false}], [{},{},{}]]:
+		var invalid_frame = Session.new()
+		var invalid_before := state(invalid_frame)
+		var invalid_result: Dictionary = invalid_frame.advance_frame(bad_inputs,[true,true])
+		check(not invalid_result.ok and state(invalid_frame) == invalid_before,"malformed_later_slot_rejects_whole_frame:"+str(bad_inputs))
+	for bad_flags in [[true,1], [true,"false"], [true,null], [true,true,true]]:
+		var invalid_frame = Session.new()
+		var invalid_before := state(invalid_frame)
+		var invalid_result: Dictionary = invalid_frame.advance_frame([{"attack":true},{}],bad_flags)
+		check(not invalid_result.ok and state(invalid_frame) == invalid_before,"malformed_later_flag_rejects_whole_frame:"+str(bad_flags))
+	var omitted_false = Session.new()
+	omitted_false.advance_frame([{},{}],[true,false])
+	var omitted_before := state(omitted_false)
+	var explicit_false: Dictionary = omitted_false.confirm_remote_input(0,1,{"attack":false,"shield":false})
+	check(explicit_false.ok and not explicit_false.rolled_back and omitted_false.rollback_count == 0 and omitted_false._history[0].confirmed[1],"omitted_false_and_explicit_false_confirm_without_false_rollback")
+	var duplicate_state := state(omitted_false)
+	check(omitted_false.confirm_remote_input(0,1,{}).ok and state(omitted_false) == duplicate_state,"sparse_semantically_identical_duplicate_is_idempotent")
+	var full_false = Session.new()
+	full_false.advance_frame([canonical({}),canonical({})],[true,false])
+	check(full_false._history[0].checksum == omitted_before.history[0].checksum,"sparse_and_full_released_inputs_have_same_authoritative_checksum")
+	for invalid_count in [0,1,3,5,7,9,1000000]:
+		var wrong_count = Session.new(); wrong_count.max_players = invalid_count
+		var wrong_before := state(wrong_count)
+		var wrong_frame: Dictionary = wrong_count.advance_frame([],[])
+		var wrong_confirm: Dictionary = wrong_count.confirm_remote_input(0,0,{})
+		check(not wrong_frame.ok and not wrong_confirm.ok and state(wrong_count) == wrong_before,"undeclared_player_count_rejects_without_allocating_frame:"+str(invalid_count))
+	# These are bounded input-array contracts ONLY, not independently connected
+	# clients or accepted 4/6/8-player BattleScenes.
+	for count in [2,4,6,8]:
+		var slots = Session.new(); slots.max_players = count
+		check(slots.confirm_remote_input(0,count-1,{"grab":true}).ok,"declared_scaffold_slot_count_accepts_last_owned_slot:"+str(count))
+		var slots_step: Dictionary = slots.advance_frame([],[])
+		check(slots_step.ok and slots_step.inputs.size() == count and slots_step.inputs[count-1].grab and slots._history[0].confirmed[count-1],"declared_scaffold_array_retains_queued_last_slot_not_multiclient_acceptance:"+str(count))
+		var slot_before := state(slots)
+		check(not slots.confirm_remote_input(1,count,{}).ok and state(slots) == slot_before,"slot_outside_declared_count_is_rejected:"+str(count))
+	var reconfigured = Session.new(); reconfigured.advance_frame([{},{}],[true,false]); reconfigured.max_players = 4
+	var reconfigured_before := state(reconfigured)
+	check(not reconfigured.advance_frame([],[]).ok and not reconfigured.confirm_remote_input(1,3,{}).ok and state(reconfigured) == reconfigured_before,"player_count_cannot_change_under_retained_input_history")
+	reconfigured.reset()
+	check(reconfigured.advance_frame([],[]).ok and reconfigured.current_frame == 1 and reconfigured._history[0].inputs.size() == 4,"explicit_session_reset_releases_old_player_count_binding")
 	check(Session.self_test().ok, "existing_private_checksum_scaffold_self_test_still_passes")
 	var result := {"PASS":failures.is_empty(),"checks":checks,"failures":failures,"scope":"Actual standalone Godot input/checksum scaffold only. No game-world rollback, multiplayer sockets, renderer/art/device/human acceptance.","HUMAN_ART_APPROVED":false,"RC2_READY":false,"V1_0_0_RELEASE_AUTHORIZED":false}
 	if not output.is_empty():
