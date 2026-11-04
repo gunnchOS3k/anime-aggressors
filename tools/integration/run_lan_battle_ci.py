@@ -96,9 +96,9 @@ def run(scope="all"):
         godot = os.environ["GODOT_BIN"]
         record["godot_version"] = subprocess.check_output([godot, "--version"], text=True).strip()
         if not record["godot_version"].startswith("4.7.1.stable"): raise RuntimeError("Unexpected engine")
-        if scope == "cursor-interface":
+        if scope in ["cursor-interface", "cursor-unlock"]:
             from run_cursor_interface_ci import run as run_cursor_interface
-            record = run_cursor_interface([godot], output, head)
+            record = run_cursor_interface([godot], output, head, only_unlock=scope == "cursor-unlock")
             return record
         project = ROOT / "game-godot/project.godot"
         config = re.sub(r'^config/(?:name|use_custom_user_dir|custom_user_dir_name)=.*\n', '', project.read_text(), flags=re.M)
@@ -214,5 +214,5 @@ def run(scope="all"):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--scope", choices=["all", "respawn", "attack", "projectiles", "physics", "resim", "cursor-interface", "inputs"], default="all")
+    parser.add_argument("--scope", choices=["all", "respawn", "attack", "projectiles", "physics", "resim", "cursor-interface", "cursor-unlock", "inputs"], default="all")
     raise SystemExit(0 if run(parser.parse_args().scope)["PASS"] else 1)

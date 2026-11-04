@@ -1,0 +1,73 @@
+{
+  "PASS": false,
+  "source_head": "6aa27c13a54f21ab2a3c4ec759ccfeafb2fef714",
+  "verified_cursor_source": "1d7eda52a49cc394d6865353b36034ab11663c41",
+  "materialized_source_bytes": 439341098,
+  "tested_source_sha256": {
+    "project.godot": "a12984b08fe88a03ef1e7a3330775cc3496f4eeb15d42fe98d2fe05b5302629a",
+    "scripts/combat/rosamere_form_selection.gd": "12c6092ef4fbcdf5acaa241aad8a4309b1f75b6264942d3fc92503ac71b21bae",
+    "scripts/combat/pink_bloom_systems.gd": "10bb223995b7d67ec48cecd24ccd8652631b22e99f8c62397ee7244be7fc8e5a",
+    "scripts/story/v1_campaign_runtime.gd": "a75d4fc8a872f9c6bca0fd5e4d19373e0fd4f322cc32ee07bcfedc4f9fd78def",
+    "scripts/fighters/fighter.gd": "b15ef4cf24b15067d48fc48f3d481c3ea3b9990ca3c7a1fcbd806a14c954444f",
+    "data/fighters/rosamere.json": "f7ed9c68c99439f9f44371a61fd3818f539f1fbdc2b77b9f77b070d0241e48fd",
+    "data/forms/rosamere.json": "8cd5f8dacb0d5d30e64ff5437b0b001cd14950a5f92b8fd628a391245b8757e4",
+    "data/moves/rosamere.json": "b363691542d0e084d41ead4168a7f46f7e5aa1ae4095d6b50df952cb95e4a340"
+  },
+  "scope": "Independent exact Cursor-source engine verification: three-form rules, declared developer-eligible ordinary Training controls and isolated earned-unlock fixtures. Not an ordinary earned campaign, original-art, native visual, multiplayer, device or human acceptance.",
+  "workflow": "https://github.com/gunnchOS3k/anime-aggressors/actions/runs/41853256428",
+  "suites": {
+    "forms": {
+      "PASS": true,
+      "assertions_PASS": true,
+      "checks": 38,
+      "failures": [],
+      "runtime_errors": [],
+      "script_errors": [],
+      "log_sha256": "1f4aefb7bdaa3aac5c3ea38b8d505eb0d072d02dfef33d1c42767bcd075bbb24",
+      "result_sha256": "fa90f546fe7a95c90bc831188af27c4f1f7d859cfddf5d7964b2b5c2809b65ba",
+      "script_sha256": "8ee792c0f61cff37d74d226ae51eea7d5fef17f2e03688d26dbb8192761a486a"
+    },
+    "controls": {
+      "PASS": false,
+      "assertions_PASS": true,
+      "checks": 28,
+      "failures": [],
+      "runtime_errors": [
+        "ERROR: Required elemental loop missing: res://assets/audio/elemental_v1/rosamere/projectile_travel.wav"
+      ],
+      "script_errors": [],
+      "log_sha256": "2eb54354739d4ea01ba30dcd120ddbd9a80eb93e6ab8b145d92cd0c4e2623509",
+      "result_sha256": "3530238fbaf0f60c55ca1d50d7fb3876914a126757a309276ac5f3443543dd05",
+      "script_sha256": "b8db00c94cf76f7bbf4eee39fcf48748c957c2feaa8a7762ec392838f6033101"
+    },
+    "unlock": {
+      "PASS": false,
+      "assertions_PASS": false,
+      "checks": 17,
+      "failures": [
+        "reset",
+        "signed_save_written",
+        "cleanup_reset"
+      ],
+      "runtime_errors": [
+        "ERROR: reset",
+        "ERROR: signed_save_written",
+        "ERROR: cleanup_reset"
+      ],
+      "script_errors": [],
+      "log_sha256": "beaef28eaa7610e517ed0653da90d5fb5a5e144ae04d9debda32fafd77292c57",
+      "result_sha256": "84d80e9f757c277db407814e96e28b1eb31990b4afbe4c33252f7b2e40c9b1dc",
+      "script_sha256": "d43118175f86e7126612a9ee87b8b3565d28addda066e391657af102b89c09d8"
+    }
+  },
+  "raw_log_sha256": "8015dd85f16c8a06bbc60dcd2e07efb6116f94206a6c820748fee5430399e9b5",
+  "findings": {
+    "forms": "38PASS",
+    "Training": "28assertionsPASS; component FAIL because original projectile travel loop missing. Model fallback and resource warnings remain recorded.",
+    "unlock": "14of17assertionsPASS; reset/save/reset fail because immutable fixture uses macOS absolute /private/tmp path, absent on Ubuntu. This is fixture portability, not established shipping Story-save defect. Source unlock rules remain staged-receipt checks, not earnedplaythrough.",
+    "Cursor_checkout_modified": false,
+    "HUMAN_ART_APPROVED": false,
+    "RC2_READY": false,
+    "V1_0_0_RELEASE_AUTHORIZED": false
+  }
+}

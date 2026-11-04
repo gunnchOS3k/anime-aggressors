@@ -15,7 +15,7 @@ CURSOR_SHA = "1d7eda52a49cc394d6865353b36034ab11663c41"
 MAX_SOURCE_BYTES = 512 * 2**20
 
 
-def run(base, output, integration_sha):
+def run(base, output, integration_sha, only_unlock=False):
     guard()
     record = {"PASS": False, "source_head": integration_sha, "verified_cursor_source": CURSOR_SHA,
               "scope": "Independent exact Cursor-source engine verification: three-form rules, declared developer-eligible ordinary Training controls and isolated earned-unlock fixtures. Not an ordinary earned campaign, original-art, native visual, multiplayer, device or human acceptance.",
@@ -80,13 +80,30 @@ def run(base, output, integration_sha):
     record["import"] = execute(engine_base + ["--editor", "--import", "--quit"], output / "cursor-import.log", 180)
     if not record["import"]["PASS"]:
         return record
-    for name, script, filename in [
+    suites = [
         ("forms", "RosamereThreeFormCanon.gd", "ROSAMERE_THREE_FORM_CANON.json"),
         ("controls", "RosamereOrdinaryControlsTraining.gd", "ROSAMERE_ORDINARY_CONTROLS_TRAINING.json"),
         ("unlock", "RosamereStoryUnlock.gd", "ROSAMERE_STORY_UNLOCK.json"),
-    ]:
+    ]
+    if only_unlock:
+        suites = [row for row in suites if row[0] == "unlock"]
+        record["scope"] = "Only the exact Cursor isolated signed-save/earned-unlock fixture, using fixture battle receipts and a temporary Linux directory matching its hardcoded macOS path. No genuine earned campaign, native/art/device/multiplayer or human acceptance. Prior forms/control results remain separately preserved; missing projectile audio remains unresolved."
+    for name, script, filename in suites:
         guard()
         profile(name)
+        if name == "unlock":
+            # Immutable Cursor fixture deliberately uses this absolute macOS
+            # temporary path. Supply the missing directory ONLY on the guarded,
+            # disposable Linux runner. No source rewrite or owner-save path.
+            temporary = Path("/private/tmp")
+            if temporary.exists():
+                if not temporary.is_dir() or temporary.is_symlink() or not os.access(temporary, os.W_OK):
+                    raise RuntimeError("Fixture temporary directory is not safely writable")
+            else:
+                subprocess.run(["sudo", "install", "-d", "-m", "1777", str(temporary)], check=True, timeout=10)
+            if (temporary / "anime-rosamere-story-unlock.json").exists():
+                raise RuntimeError("Refusing to overwrite an existing fixture save")
+            record["fixture_environment"] = {"temporary_directory":"/private/tmp", "purpose":"Unmodified macOS-path fixture on disposable Linux only; no owner save", "source_modified":False}
         result_dir = output / ("cursor-" + name)
         result_dir.mkdir(exist_ok=False)
         script_path = project_root / "tests/integration" / script
@@ -105,6 +122,6 @@ def run(base, output, integration_sha):
         # to obtain an independent pass or continue masking parser errors.
         if outcome.get("script_errors") or outcome.get("guard_stop"):
             break
-    record["PASS"] = len(record["suites"]) == 3 and all(row["PASS"] for row in record["suites"].values())
+    record["PASS"] = len(record["suites"]) == len(suites) and all(row["PASS"] for row in record["suites"].values())
     record["available_end_bytes"] = guard()
     return record
