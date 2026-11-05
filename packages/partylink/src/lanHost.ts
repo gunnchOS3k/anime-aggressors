@@ -9,6 +9,7 @@ import type { AddressInfo } from "node:net";
 import { renderBrowserControllerHtml } from "./browserController.js";
 import { PartyRoomSession, type CreateRoomOptions } from "./partyRoom.js";
 import { HostAuthoritativePartySim, partyGameConfig } from "./hostAuthoritativeParty.js";
+import { consumePostedPartyFrames } from "./postedPartyFrames.js";
 import { teamForSeat, type PartyTeamMode } from "./teamAssign.js";
 import { buildJoinQrPayload } from "./identity.js";
 import type { ControllerInput, PublicGameState } from "./types.js";
@@ -91,7 +92,6 @@ export async function startLanPartyHost(opts: LanHostOptions): Promise<LanHostHa
   const session = new PartyRoomSession(opts);
   let sim: HostAuthoritativePartySim | null = null;
   let teamMode: PartyTeamMode = opts.teamMode ?? "FFA";
-  const pendingInputs: ControllerInput[] = [];
 
   const beginMatch = (ownerToken: string) => {
     ensureSeatDefaults(session, teamMode);
@@ -221,7 +221,6 @@ export async function startLanPartyHost(opts: LanHostOptions): Promise<LanHostHa
       if (url.pathname === "/input") {
         const input = body as unknown as ControllerInput;
         const ack = session.submitInput(input);
-        if (ack.accepted) pendingInputs.push(input);
         sendJson(res, 200, ack);
         return;
       }
@@ -279,46 +278,27 @@ export async function startLanPartyHost(opts: LanHostOptions): Promise<LanHostHa
       return beginMatch(owner.token);
     },
     tick: (inputs = []) => {
-      const batch = [...pendingInputs, ...inputs];
-      pendingInputs.length = 0;
-      if (sim) {
-        sim.advance(
-          batch.map((i) => ({
-            seatIndex: i.seatIndex,
-            sequence: i.sequence,
-            frame: {
-              frame: 0,
-              playerId: i.seatIndex,
-              left: Boolean(i.semantic.left ?? i.semantic.steerLeft),
-              right: Boolean(i.semantic.right ?? i.semantic.steerRight),
-              up: Boolean(i.semantic.up),
-              down: Boolean(i.semantic.down),
-              jump: Boolean(i.semantic.jump),
-              attack: Boolean(i.semantic.attack),
-              special: Boolean(i.semantic.special),
-              shield: Boolean(i.semantic.shield),
-              dodge: Boolean(i.semantic.dodge),
-              grab: false,
-            },
-          })),
-          batch.map(() => 5),
-        );
-        session.advanceHostTick();
-        const state = sim.getState();
-        const pub = session.publicGameState();
-        pub.world = {
-          players: state.players.map((p) => ({
-            seatIndex: p.id,
-            x: p.x,
-            y: p.y,
-            stocks: p.stocks,
-          })),
-          arena: sim.arenaCamera(),
-          hudSlots: sim.hudSlots(),
-        };
-        return pub;
+      if (!sim) {
+        session.drainPendingInputs();
+        return session.publicGameState();
       }
-      return session.publicGameState();
+      const batch = consumePostedPartyFrames(session, sim.getFrame(), inputs);
+      sim.advance(batch, batch.map(() => 5));
+      session.advanceHostTick();
+      const state = sim.getState();
+      const pub = session.publicGameState();
+      pub.world = {
+        players: state.players.map((p) => ({
+          seatIndex: p.id,
+          x: p.x,
+          y: p.y,
+          stocks: p.stocks,
+        })),
+        arena: sim.arenaCamera(),
+        hudSlots: sim.hudSlots(),
+        inputs: batch,
+      };
+      return pub;
     },
     getPublicState: () => session.publicGameState(),
   };
