@@ -26,6 +26,7 @@ export function renderBrowserControllerHtml(opts: {
       <button data-act="special">Special</button>
       <button data-act="shield">Shield</button>
       <button data-act="dodge">Dodge</button>
+      <button data-act="grab">Grab</button>
       <button data-act="pause">Pause</button>
     </div>`
       : `
